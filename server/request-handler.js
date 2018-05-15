@@ -31,6 +31,22 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
+
+  // See the note below about CORS headers.
+  var defaultCorsHeaders = {
+    'access-control-allow-origin': '*',
+    'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'access-control-allow-headers': 'content-type, accept',
+    'access-control-max-age': 10 // Seconds.
+  };
+  var headers = defaultCorsHeaders;
+
+  // Tell the client we are sending them plain text.
+  //
+  // You will need to change this if you are sending something
+  // other than plain text, like JSON or HTML.
+  headers['Content-Type'] = 'text/plain';
+
   var { method, url } = request;
   // var method = request.method;
   // var url = request.url;
@@ -47,29 +63,25 @@ var requestHandler = function(request, response) {
   } else if (method === 'POST') {
     if (url === '/classes/messages') {
       request.on('data', function(data) {
-
-          fs.writeFile('./server/data/data.json', JSON.stringify(dataFile.concat(JSON.parse(data))), (err) => console.log("Message:", err))
+          fs.writeFile('./server/data/data.json', JSON.stringify(dataFile.concat(JSON.parse(data))), (err) => err ? console.log("Message:", err) : null)
       })
       var statusCode = 201;
       response.writeHead(statusCode, headers);
-      response.end('end');
+      var obj = {results: dataFile};
+      response.end(JSON.stringify(obj))
     }
 
 
 
+  } else if (method === 'OPTIONS') {
+    response.writeHead(200, headers);
+    response.end()
   } else {
     response.writeHead(404, headers);
-    response.end('end2');
+    response.end();
   }
 
-  // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
 
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'text/plain';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -86,11 +98,6 @@ var requestHandler = function(request, response) {
 //
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
-};
+
 
 module.exports = {requestHandler};

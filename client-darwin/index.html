@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chatterbox</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- dependencies -->
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script>
+      // YOU DO NOT NEED TO EDIT THIS CODE
+      if (!/(&|\?)username=/.test(window.location.search)) {
+        var newSearch = window.location.search;
+        if (newSearch !== '' & newSearch !== '?') {
+          newSearch += '&';
+        }
+        newSearch += 'username=' + (prompt('What is your name?') || 'anonymous');
+        window.location.search = newSearch;
+      }
+    </script>
+
+    <!-- your scripts -->
+    <!-- <script src="env/config.js"></script> -->
+    <script src="scripts/app.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-sm-7">
+          <h1 id="logo-brand"><i class="fa fa-weixin" aria-hidden="true"></i> chatterbox</h1>
+
+          <div id="rooms">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="roomSelect">Room:</label>
+                </div>
+                <select class="custom-select" id="roomSelect">
+                  <option value="all" selected="selected">All rooms</option>
+                  <option value="new" class="new-room">New room</option>
+                </select>
+              </div>
+          </div>
+          <form action="#" id="send" method="post">
+            <div class="row">
+              <div class="col-sm-8">
+                <input type="text" name="message" id="message" class="form-control"/>
+              </div>
+              <div class="col-sm-4">
+                <button type="submit" name="submit" class="btn btn-secondary btn-block submit"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit</button>
+              </div>
+            </div>
+          </form>
+          <div id="chats" class="mt-2"></div>
+        </div>
+      </div>
+
+
+
+
+      <!-- </div> -->
+
+    </div>
+  </body>
+</html>
