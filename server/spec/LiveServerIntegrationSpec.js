@@ -58,13 +58,55 @@ describe('server', function() {
     request(requestParams, function(error, response, body) {
       // Now if we request the log, that message we posted should be there:
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+        console.log("body", JSON.parse(body));
         var messages = JSON.parse(body).results;
+        console.log(messages);
         expect(messages[0].username).to.equal('Jono');
         expect(messages[0].text).to.equal('Do my bidding!');
         done();
       });
     });
   });
+
+  it('should (((())))', function(done) {
+    var requestParams = {method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+      json: {
+        username: 'Jono',
+        text: 'Do my bidding!'}
+    };
+
+    request(requestParams, function(error, response, body) {
+      // Now if we request the log, that message we posted should be there:
+      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+        console.log("body", JSON.parse(body));
+        var messages = JSON.parse(body).results;
+        console.log(messages);
+        expect(messages[0].username).to.equal('Jono');
+        expect(messages[0].text).to.equal('Do my bidding!');
+        done();
+      });
+    });
+    var requestParams = {method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+      json: {
+        username: 'darwinnn',
+        text: 'my friend is bananas'}
+    };
+
+    request(requestParams, function(error, response, body) {
+      // Now if we request the log, that message we posted should be there:
+      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+        console.log("body", JSON.parse(body));
+        var messages = JSON.parse(body).results;
+        console.log(messages);
+        expect(messages[0].username).to.equal('darwinnn');
+        expect(messages[0].text).to.equal('my friend is bananas');
+        done();
+      });
+    });
+  });
+
 
   it('Should 404 when asked for a nonexistent endpoint', function(done) {
     request('http://127.0.0.1:3000/arglebargle', function(error, response, body) {

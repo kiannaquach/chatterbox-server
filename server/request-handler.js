@@ -11,9 +11,13 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-var url = require('url');
+// var url = require('url');
+
+// allows for you to work with file system on computer
 var fs = require('fs');
+// dataFile is where  our new and old data is stored
 var dataFile = require('./data/data.json');
+
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -39,6 +43,7 @@ var requestHandler = function(request, response) {
     'access-control-allow-headers': 'content-type, accept',
     'access-control-max-age': 10 // Seconds.
   };
+
   var headers = defaultCorsHeaders;
 
   // Tell the client we are sending them plain text.
@@ -47,46 +52,46 @@ var requestHandler = function(request, response) {
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = 'text/plain';
 
+
+  /************ DECONSTRUCTING  ****************/
   var { method, url } = request;
   // var method = request.method;
   // var url = request.url;
-  // method: GET, url: /classes/messages
+
+  // .writeHead() writes to the request line and headers of the response,
+  // which includes the status and all headers.
   if (method === 'GET' && url === '/classes/messages') {
     // The outgoing status.
     var statusCode = 200;
     response.writeHead(statusCode, headers);
     var obj = {results: dataFile};
-    response.end(JSON.stringify(obj))
-
-
-
+    response.end(JSON.stringify(obj));
   } else if (method === 'POST') {
     if (url === '/classes/messages') {
-      request.on('data', function(data) {
-          fs.writeFile('./server/data/data.json', JSON.stringify(dataFile.concat(JSON.parse(data))), (err) => err ? console.log("Message:", err) : null)
-      })
-      var statusCode = 201;
-      response.writeHead(statusCode, headers);
-      var obj = {results: dataFile};
-      response.end(JSON.stringify(obj))
+      var updatedData = []
+      request
+        .on('data', function(data) {
+            // fs.writeFile('./server/data/data.json', JSON.stringify(dataFile.concat(JSON.parse(data))), (err) => err ? console.log("Message:", err) : null);
+            // updatedData = [JSON.parse(data)].concat(dataFile)
+            // fs.writeFile('./server/data/data.json', JSON.stringify(updatedData), (err) => err ? console.log("Message:", err) : null);
+            updatedData.unshift(data)
+        })
+        .on('end', function(){
+
+            var statusCode = 201;
+            response.writeHead(statusCode, headers);
+            var obj = {results: updatedData};
+            response.end(JSON.stringify(obj));
+            // process.exit(1)
+        })
     }
-
-
-
-  } else if (method === 'OPTIONS') {
+  } else if (method === 'OPTIONS' && url === '/classes/messages') {
     response.writeHead(200, headers);
-    response.end()
+    response.end();
   } else {
     response.writeHead(404, headers);
     response.end();
   }
-
-
-
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-
-
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

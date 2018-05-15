@@ -23,9 +23,15 @@ var ip = '127.0.0.1';
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
 
+
+// require file request-handler from local file path
 var requiredRequest = require('./request-handler')
+// createServer creates a server and takes cb
+  // cb is called when server is successfully created
+  // cb allows for you to listen to the given port
 var server = http.createServer(requiredRequest.requestHandler);
 
+// makes server listen to your port
 server.listen(port, () => console.log('Listening on http://' + ip + ':' + port));
 
 // To start this server, run:
